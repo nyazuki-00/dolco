@@ -1,14 +1,42 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Music } from './entities/music.entity';
+import { CreateMusicDto } from './dto/create-music.dto';
+import { UpdateMusicDto } from './dto/update-music.dto';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
-export class SearchService {
+export class MusicService {
   constructor(
+    @InjectRepository(Music)
+    private musicRepository: Repository<Music>,
     private http: HttpService,
     private config: ConfigService,
   ) {}
+
+  async create(dto: CreateMusicDto, userId: number) {
+    const music = this.musicRepository.create({ ...dto, userId });
+    return this.musicRepository.save(music);
+  }
+
+  findAll() {
+    return `This action returns all music`;
+  }
+
+  findOne(id: number) {
+    return `This action returns a #${id} music`;
+  }
+
+  update(id: number, updateMusicDto: UpdateMusicDto) {
+    return `This action updates a #${id} music`;
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} music`;
+  }
 
   async searchTrack(query: string) {
     const clientId = this.config.get<string>('SPOTIFY_CLIENT_ID');

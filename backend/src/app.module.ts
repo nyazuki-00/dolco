@@ -3,12 +3,12 @@ import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { SearchController } from './search/search.controller';
-import { SearchService } from './search/search.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
+import { Music } from './music/entities/music.entity';
+import { MusicModule } from './music/music.module';
 
 @Module({
   imports: [
@@ -16,6 +16,7 @@ import { User } from './user/entities/user.entity';
     HttpModule,
     UserModule,
     AuthModule,
+    MusicModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'db',
@@ -24,11 +25,11 @@ import { User } from './user/entities/user.entity';
       password: 'password',
       database: 'dolco',
       autoLoadEntities: true,
-      entities: [User],
+      entities: [User, Music],
       synchronize: true,
     }),
   ],
-  controllers: [AppController, SearchController],
-  providers: [AppService, SearchService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

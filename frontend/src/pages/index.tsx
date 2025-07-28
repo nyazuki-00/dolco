@@ -15,7 +15,7 @@ export default function Home() {
   const API_BASE_URL = "http://localhost:3000";
 
   const handleTrackSubmit = async (query: string) => {
-    const res = await fetch(`${API_BASE_URL}/search?q=${encodeURIComponent(query)}`);
+    const res = await fetch(`${API_BASE_URL}/music/search?q=${encodeURIComponent(query)}`);
     const data = await res.json();
     setTracks(data.tracks.items);
     setSelectedTrack(null);
