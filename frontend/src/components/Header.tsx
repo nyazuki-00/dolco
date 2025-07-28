@@ -14,7 +14,7 @@ export default function Header() {
         <Link href="/login" className="text-blue-800 font-bold hover:underline">
         ログイン
         </Link>
-        <Link href="/signup" className="hover:underline">
+        <Link href="/signup" className="text-blue-800 font-bold hover:underline">
           新規登録
         </Link>
       </nav>
