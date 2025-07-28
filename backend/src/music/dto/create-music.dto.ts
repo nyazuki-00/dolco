@@ -27,10 +27,6 @@ export class CreateMusicDto {
 
   @IsOptional()
   @IsString()
-  previewUrl?: string;
-
-  @IsOptional()
-  @IsString()
   memo?: string;
 
   @IsOptional()

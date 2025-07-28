@@ -29,9 +29,6 @@ export class Music {
   albumName: string;
 
   @Column({ nullable: true })
-  previewUrl: string;
-
-  @Column({ nullable: true })
   memo: string;
 
   @Column('simple-array', { nullable: true })
