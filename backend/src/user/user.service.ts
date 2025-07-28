@@ -37,7 +37,7 @@ export class UserService {
   //   return `This action removes a #${id} user`;
   // }
 
-  // async findByEmail(email: string): Promise<User | undefined> {
-  //   return this.usersRepository.findOne({ where: { email } });
-  // }
+  async findByEmail(email: string): Promise<User | null> {
+    return this.usersRepository.findOne({ where: { email } });
+  }
 }
