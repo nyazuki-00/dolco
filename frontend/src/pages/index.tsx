@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import Window from "@/components/Window";
+import Header from "@/components/Header";
 import SearchBox from "@/components/SearchBox";
 import TrackList from "@/components/TrackList";
 import TrackConfirm from "@/components/TrackConfirm";
 
 export default function Home() {
+  const [user, setUser] = useState<{ name: string } | null>(null);
   const [showSearch, setShowSearch] = useState(false);
   const [query, setQuery] = useState("");
   const [tracks, setTracks] = useState<any[]>([]);
@@ -30,9 +31,34 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    const fetchUser = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/users/me`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (!res.ok) throw new Error("ユーザー取得失敗");
+
+        const data = await res.json();
+        setUser(data);
+        setMessage(`${data.name}、今日は何をして遊ぶ？`);
+      } catch (error) {
+        setMessage("こんにちは、わたしに音楽を教えてくれる？");
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   return (
     <main className="min-h-screen bg-pink-100 flex flex-col items-center justify-center p-4">
-      <Window />
+      <Header />
       <Image src="/doll.png" alt="doll" width={150} height={150} />
       <p className="bg-white px-4 py-2 mt-4 rounded shadow text-sm text-center max-w-xs">
         {message}
