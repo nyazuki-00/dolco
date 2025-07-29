@@ -25,21 +25,28 @@ export default function Home() {
     if (selectedTrack) {
       setMessage(`わかった... ${selectedTrack.name} 聴くね`);
       setShowSearch(false);
-      setTracks([]);
       setQuery("");
+      setTracks([]);
       setSelectedTrack(null);
     }
   };
 
+  const handleCancelSearch = () => {
+    setShowSearch(false);
+    setQuery("");
+    setTracks([]);
+    setSelectedTrack(null);
+  };
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) return;
 
     const fetchUser = async () => {
       try {
         const res = await fetch(`${API_BASE_URL}/users/me`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -61,24 +68,41 @@ export default function Home() {
       <Header />
       <Image src="/doll.png" alt="doll" width={150} height={150} />
       <p className="bg-white px-4 py-2 mt-4 rounded shadow text-sm text-center max-w-xs">
-        {message}
+        {showSearch ? "どんな音楽？" : message}
       </p>
 
       <div className="mt-6 flex gap-4">
-        <button
-          className="bg-pink-300 text-black px-4 py-2 rounded-md"
-          onClick={() => setShowSearch(true)}
-        >
-          音楽を教える
-        </button>
-        <button className="bg-blue-200 px-4 py-2 rounded shadow">写真を見せる</button>
+        {!showSearch && (
+          <>
+            <button
+              className="bg-pink-300 text-black px-4 py-2 rounded-md"
+              onClick={() => setShowSearch(true)}
+            >
+              音楽を教える
+            </button>
+            <button className="bg-blue-200 px-4 py-2 rounded shadow">写真を見せる</button>
+          </>
+        )}
+
+        {showSearch && (
+          <button
+            className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400"
+            onClick={handleCancelSearch}
+          >
+            やっぱやめる
+          </button>
+        )}
       </div>
 
       {showSearch && (
         <SearchBox query={query} setQuery={setQuery} onSubmit={handleTrackSubmit} />
       )}
 
-      <TrackList tracks={tracks} selectedTrack={selectedTrack} setSelectedTrack={setSelectedTrack} />
+      <TrackList
+        tracks={tracks}
+        selectedTrack={selectedTrack}
+        setSelectedTrack={setSelectedTrack}
+      />
 
       {selectedTrack && (
         <TrackConfirm selectedTrack={selectedTrack} onConfirm={handleTrackConfirm} />
