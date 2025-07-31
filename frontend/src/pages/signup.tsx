@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 
 export default function SignupPage() {
   const router = useRouter();
+  const [ownerCode, setOwnerCode] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -13,7 +14,7 @@ export default function SignupPage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, name, password }),
+      body: JSON.stringify({ ownerCode, email, name, password }),
     });
 
     if (res.ok) {
@@ -28,6 +29,13 @@ export default function SignupPage() {
     <div className="min-h-screen flex items-center justify-center bg-pink-100">
       <div className="bg-white p-8 rounded shadow-md w-80">
         <h2 className="text-xl font-bold mb-4 text-center">新規登録</h2>
+        <input
+          type="ownerCode"
+          placeholder="オーナーコード"
+          className="w-full mb-3 p-2 border rounded"
+          value={ownerCode}
+          onChange={(e) => setOwnerCode(e.target.value)}
+        />
         <input
           type="email"
           placeholder="メールアドレス"

@@ -20,11 +20,27 @@ export class UserController {
 
   @Post('register')
   async register(
-    @Body() body: { email: string; name: string; password: string },
+    @Body()
+    body: {
+      ownerCode: string;
+      email: string;
+      name: string;
+      password: string;
+    },
   ) {
-    const { email, name, password } = body;
-    const user = await this.userService.create(email, name, password);
-    return { id: user.id, email: user.email, name: user.name };
+    const { ownerCode, email, name, password } = body;
+    const user = await this.userService.create(
+      ownerCode,
+      email,
+      name,
+      password,
+    );
+    return {
+      id: user.id,
+      ownerCode: user.ownerCode,
+      email: user.email,
+      name: user.name,
+    };
   }
 
   // @Get()

@@ -3,7 +3,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
 export class Music {
@@ -39,4 +41,7 @@ export class Music {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(() => User, (user) => user.musics)
+  user: User;
 }

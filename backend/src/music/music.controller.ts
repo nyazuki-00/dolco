@@ -26,14 +26,14 @@ export class MusicController {
     return this.musicService.create(createMusicDto, userId);
   }
 
-  @Get()
-  findAll() {
-    return this.musicService.findAll();
-  }
-
   @Get('search')
   async search(@Query('q') q: string) {
     return this.musicService.searchTrack(q);
+  }
+
+  @Get(':ownerCode')
+  getByOwnerCode(@Param('ownerCode') ownerCode: string) {
+    return this.musicService.findByOwnerCode(ownerCode);
   }
 
   @Get(':id')

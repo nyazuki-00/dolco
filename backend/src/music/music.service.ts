@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Music } from './entities/music.entity';
@@ -7,12 +7,15 @@ import { UpdateMusicDto } from './dto/update-music.dto';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class MusicService {
   constructor(
     @InjectRepository(Music)
     private musicRepository: Repository<Music>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
     private http: HttpService,
     private config: ConfigService,
   ) {}
@@ -28,6 +31,18 @@ export class MusicService {
 
   findOne(id: number) {
     return `This action returns a #${id} music`;
+  }
+
+  async findByOwnerCode(ownerCode: string) {
+    const user = await this.userRepository.findOne({
+      where: { ownerCode: ownerCode },
+    });
+    if (!user) throw new NotFoundException('オーナーが見つかりません');
+
+    return this.musicRepository.find({
+      where: { user: user },
+      order: { createdAt: 'DESC' },
+    });
   }
 
   update(id: number, updateMusicDto: UpdateMusicDto) {

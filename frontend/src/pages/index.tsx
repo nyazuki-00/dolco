@@ -4,14 +4,18 @@ import Header from "@/components/Header";
 import SearchBox from "@/components/SearchBox";
 import TrackList from "@/components/TrackList";
 import TrackConfirm from "@/components/TrackConfirm";
+import MusicHistoryModal from "@/components/MusicHistoryModal";
+import type { Music } from "@/types/music";
 
 export default function Home() {
-  const [user, setUser] = useState<{ name: string } | null>(null);
+  const [user, setUser] = useState<{ name: string, ownerCode: string } | null>(null);
   const [showSearch, setShowSearch] = useState(false);
   const [query, setQuery] = useState("");
   const [tracks, setTracks] = useState<any[]>([]);
   const [selectedTrack, setSelectedTrack] = useState<any>(null);
+  const [showMusicHistory, setShowMusicHistory] = useState(false);
   const [message, setMessage] = useState("こんにちは、わたしに音楽を教えてくれる？");
+  const [musicHistory, setMusicHistory] = useState<Music[]>([]);
   const API_BASE_URL = "http://localhost:3000";
 
   const handleTrackSubmit = async (query: string) => {
@@ -23,7 +27,7 @@ export default function Home() {
 
   const handleTrackConfirm = () => {
     if (selectedTrack) {
-      setMessage(`わかった... ${selectedTrack.name} 聴くね`);
+      setMessage(`ふーん... ${selectedTrack.name} 聴くね`);
       setShowSearch(false);
       setQuery("");
       setTracks([]);
@@ -63,9 +67,35 @@ export default function Home() {
     fetchUser();
   }, []);
 
+  useEffect(() => {
+    const ownerCode = user?.ownerCode;
+    if (!ownerCode || !showMusicHistory) return;
+  
+    fetch(`${API_BASE_URL}/music/${ownerCode}`)
+      .then((res) => res.json())
+      .then((data) => setMusicHistory(data))
+      .catch((err) => console.error("音楽履歴の取得に失敗", err));
+  }, [user?.ownerCode, showMusicHistory]);
+
   return (
     <main className="min-h-screen bg-pink-100 flex flex-col items-center justify-center p-4">
       <Header />
+      <Image
+        src="/shelf.png"
+        alt="music history"
+        width={200}
+        height={200}
+        className="absolute top-20 left-20 cursor-pointer"
+        onClick={() => setShowMusicHistory(true)}
+      />
+
+    {showMusicHistory && (
+      <MusicHistoryModal
+        musicHistory={musicHistory}
+        onClose={() => setShowMusicHistory(false)}
+      />
+    )}
+
       <Image src="/doll.png" alt="doll" width={150} height={150} />
       <p className="bg-white px-4 py-2 mt-4 rounded shadow text-sm text-center max-w-xs">
         {showSearch ? "どんな音楽？" : message}

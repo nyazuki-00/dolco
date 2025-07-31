@@ -12,12 +12,18 @@ export class UserService {
   ) {}
 
   async create(
+    ownerCode: string,
     email: string,
     name: string,
     plainPassword: string,
   ): Promise<User> {
     const hashed = await bcrypt.hash(plainPassword, 10);
-    const user = this.usersRepository.create({ email, name, password: hashed });
+    const user = this.usersRepository.create({
+      ownerCode,
+      email,
+      name,
+      password: hashed,
+    });
     return this.usersRepository.save(user);
   }
 
