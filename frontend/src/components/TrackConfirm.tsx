@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { apiBaseUrl } from "@/libs/config";
 
 type Props = {
   selectedTrack: any;
@@ -23,7 +24,7 @@ export default function TrackConfirm({ selectedTrack, onConfirm }: Props) {
 
   const handleConfirm = async () => {
     try {
-      await fetch("http://localhost:3000/music", {
+      await fetch(`${apiBaseUrl}/music`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

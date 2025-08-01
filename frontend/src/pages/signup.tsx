@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { apiBaseUrl } from "@/libs/config";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -9,7 +10,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
 
   const handleSignup = async () => {
-    const res = await fetch("http://localhost:3000/users/register", {
+    const res = await fetch(`${apiBaseUrl}/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

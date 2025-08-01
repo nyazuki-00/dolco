@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { apiBaseUrl } from "@/libs/config";
 import Image from "next/image";
 import Header from "@/components/Header";
 import SearchBox from "@/components/SearchBox";
@@ -16,10 +17,9 @@ export default function Home() {
   const [showMusicHistory, setShowMusicHistory] = useState(false);
   const [message, setMessage] = useState("こんにちは、わたしに音楽を教えてくれる？");
   const [musicHistory, setMusicHistory] = useState<Music[]>([]);
-  const API_BASE_URL = "http://localhost:3000";
 
   const handleTrackSubmit = async (query: string) => {
-    const res = await fetch(`${API_BASE_URL}/music/search?q=${encodeURIComponent(query)}`);
+    const res = await fetch(`${apiBaseUrl}/music/search?q=${encodeURIComponent(query)}`);
     const data = await res.json();
     setTracks(data.tracks.items);
     setSelectedTrack(null);
@@ -48,7 +48,7 @@ export default function Home() {
 
     const fetchUser = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/users/me`, {
+        const res = await fetch(`${apiBaseUrl}/users/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -71,7 +71,7 @@ export default function Home() {
     const ownerCode = user?.ownerCode;
     if (!ownerCode || !showMusicHistory) return;
   
-    fetch(`${API_BASE_URL}/music/${ownerCode}`)
+    fetch(`${apiBaseUrl}/music/${ownerCode}`)
       .then((res) => res.json())
       .then((data) => setMusicHistory(data))
       .catch((err) => console.error("音楽履歴の取得に失敗", err));
