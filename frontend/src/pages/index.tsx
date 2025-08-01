@@ -80,23 +80,28 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-pink-100 flex flex-col items-center justify-center p-4">
       <Header />
-      <Image
-        src="/shelf.png"
-        alt="music history"
-        width={200}
-        height={200}
-        className="absolute top-20 left-20 cursor-pointer"
-        onClick={() => setShowMusicHistory(true)}
-      />
 
-    {showMusicHistory && (
-      <MusicHistoryModal
-        musicHistory={musicHistory}
-        onClose={() => setShowMusicHistory(false)}
-      />
-    )}
+      <div className="flex gap-4 overflow-x-auto w-full justify-center mb-6">
+        <Image
+          src="/shelf.png"
+          alt="music shelf"
+          width={200}
+          height={200}
+          className="cursor-pointer"
+          onClick={() => setShowMusicHistory(true)}
+        />
+        <Image
+          src="/shelf.png"
+          alt="music shelf"
+          width={200}
+          height={200}
+          className="cursor-pointer"
+          onClick={() => setShowMusicHistory(true)}
+        />
+      </div>
 
       <Image src="/doll.png" alt="doll" width={150} height={150} />
+
       <p className="bg-white px-4 py-2 mt-4 rounded shadow text-sm text-center max-w-xs">
         {showSearch ? "どんな音楽？" : message}
       </p>
@@ -136,6 +141,13 @@ export default function Home() {
 
       {selectedTrack && (
         <TrackConfirm selectedTrack={selectedTrack} onConfirm={handleTrackConfirm} />
+      )}
+
+      {showMusicHistory && (
+        <MusicHistoryModal
+          musicHistory={musicHistory}
+          onClose={() => setShowMusicHistory(false)}
+        />
       )}
     </main>
   );
