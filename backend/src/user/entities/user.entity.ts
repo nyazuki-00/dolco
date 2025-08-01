@@ -1,9 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Music } from '../../music/entities/music.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ unique: true })
+  ownerCode: string;
 
   @Column({ unique: true })
   email: string;
@@ -13,4 +17,7 @@ export class User {
 
   @Column()
   password: string;
+
+  @OneToMany(() => Music, (music) => music.user)
+  musics: Music[];
 }
