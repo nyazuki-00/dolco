@@ -17,20 +17,23 @@ export default function TracksPage	() {
       .then((res) => res.json())
       .then((data) => setTracks(data))
       .catch((err) => console.error("履歴の取得に失敗", err));
-  }, [ownerCode]);
+  }, [router.isReady, ownerCode]);
+
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-pink-50 bg-opacity-90 p-6 overflow-y-auto z-50">
+      <div className="absolute top-4 left-4">
+        <button
+          onClick={() => router.back()}
+          className="bg-pink-200 hover:bg-pink-300 text-black px-4 py-2 rounded-lg shadow transition"
+        >
+          ← 戻る
+        </button>
+      </div>
+
       {/* メインタイトル */}
       <h2 className="text-xl font-bold text-center text-pink-700 mb-6 border border-pink-200 rounded-lg py-2 px-4 w-fit mx-auto">
         Music
       </h2>
-
-      <button
-        className="mt-6 bg-blue-200 px-4 py-2 rounded right-0"
-        onClick={() => router.back()}
-      >
-        戻る
-      </button>
 
       <div className="flex justify-center items-start mb-6 gap-4">
         {/* ドール */}

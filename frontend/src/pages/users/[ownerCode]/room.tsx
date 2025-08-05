@@ -13,6 +13,7 @@ export default function Home() {
   const { loginUser } = useLoginUserContext();
   const { ownerCode: routeOwnerCode } = router.query;
   const [ownerCode, setOwnerCode] = useState<string | null>(null);
+  const [isMyRoom, setIsMyRoom] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [query, setQuery] = useState("");
   const [tracks, setTracks] = useState<any[]>([]);
@@ -44,9 +45,11 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const isMyRoom = loginUser.ownerCode === ownerCode;
+    if (!loginUser || !ownerCode) return;
+    const isMine = loginUser.ownerCode === ownerCode;
+    setIsMyRoom(isMine);
 
-    if (isMyRoom) {
+    if (isMine) {
       setMessage(`${loginUser.name}、今日は何をして遊ぶ？`);
     } else {
       setMessage(`ようこそ、${loginUser.name}さん。オーナーのこと知りたい？`);
@@ -89,7 +92,7 @@ export default function Home() {
       </p>
 
       <div className="mt-6 flex gap-4">
-        {!showSearch && (
+        {!showSearch && isMyRoom && (
           <>
             <button
               className="bg-pink-300 text-black px-4 py-2 rounded-md"

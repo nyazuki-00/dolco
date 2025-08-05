@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { apiBaseUrl } from "@/libs/config";
+import { useLoginUserContext } from "@/contexts/LoginUserContext";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { setLoginUser } = useLoginUserContext();
 
   const handleLogin = async () => {
     const res = await fetch(`${apiBaseUrl}/auth/login`, {
@@ -18,7 +20,23 @@ export default function LoginPage() {
 
     if (res.ok) {
       const data = await res.json();
-      localStorage.setItem("token", data.accessToken);
+      const token = data.accessToken;
+
+      localStorage.setItem("token", token);
+
+      const meRes = await fetch(`${apiBaseUrl}/users/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    
+      if (meRes.ok) {
+        const me = await meRes.json();
+        setLoginUser(me);
+      } else {
+        setLoginUser({ name: "ゲスト", ownerCode: "guest" });
+      }
+
       router.push(`/users/${data.ownerCode}/room`);
     } else {
       alert("ログイン失敗！");
