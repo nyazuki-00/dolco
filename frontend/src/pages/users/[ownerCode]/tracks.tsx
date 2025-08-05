@@ -2,20 +2,20 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { apiBaseUrl } from "@/libs/config";
 import Image from "next/image";
-import type { Music } from "@/types/music";
+import type { Track } from "@/types/track";
 
 export default function TracksPage	() {
   const router = useRouter();
   const { ownerCode } = router.query;
-  const [musicHistory, setMusicHistory] = useState<Music[]>([]);
-  const [selectedMusic, setSelectedMusic] = useState<Music | null>(null);
+  const [tracks, setTracks] = useState<Track[]>([]);
+  const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
 
   useEffect(() => {
     if (typeof ownerCode !== "string") return;
 
-    fetch(`${apiBaseUrl}/music/${ownerCode}`)
+    fetch(`${apiBaseUrl}/track/${ownerCode}`)
       .then((res) => res.json())
-      .then((data) => setMusicHistory(data))
+      .then((data) => setTracks(data))
       .catch((err) => console.error("履歴の取得に失敗", err));
   }, [ownerCode]);
   return (
@@ -40,18 +40,18 @@ export default function TracksPage	() {
 
         {/* 吹き出し */}
         <div className="bg-white shadow-lg p-4 rounded-xl w-64 z-50">
-          {selectedMusic ? (
+          {selectedTrack ? (
             <>
               <p className="text-sm text-gray-700">
-                {selectedMusic.artist}の
+                {selectedTrack.artist}の
                 <span className="font-bold text-pink-500">
-                  {selectedMusic.title}
+                  {selectedTrack.title}
                 </span>
                 だね。
               </p>
               <p className="text-sm text-gray-700 mt-1">
                 オーナーが「
-                {selectedMusic.memo || "..."}
+                {selectedTrack.memo || "..."}
                 」って言ってた。
               </p>
               <p className="text-sm mt-1">この曲すき。</p>
@@ -69,24 +69,24 @@ export default function TracksPage	() {
       <div className="flex gap-6 items-start justify-center">
         {/* 曲一覧グリッド */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-6 gap-y-4">
-          {musicHistory.map((music) => (
+          {tracks.map((track) => (
             <div
-              key={music.id}
+              key={track.id}
               className="bg-white shadow-md rounded-xl w-[120px] p-2 flex flex-col items-center text-center cursor-pointer"
-              onClick={() => setSelectedMusic(music)}
+              onClick={() => setSelectedTrack(track)}
             >
               <div className="w-[90px] h-[90px] relative rounded overflow-hidden mb-2">
                 <Image
-                  src={music.imageUrl}
-                  alt={`${music.title}のアルバム画像`}
+                  src={track.imageUrl}
+                  alt={`${track.title}のアルバム画像`}
                   fill
                   style={{ objectFit: "cover" }}
                 />
               </div>
-              <p className="text-xs text-gray-500 truncate w-full">{music.artist}</p>
-              <p className="text-xs text-gray-400 truncate w-full">{music.albumName}</p>
+              <p className="text-xs text-gray-500 truncate w-full">{track.artist}</p>
+              <p className="text-xs text-gray-400 truncate w-full">{track.albumName}</p>
               <p className="text-sm font-semibold text-pink-600 truncate w-full">
-                {music.title}
+                {track.title}
               </p>
             </div>
           ))}

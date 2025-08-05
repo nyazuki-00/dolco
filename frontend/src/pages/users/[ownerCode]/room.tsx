@@ -20,7 +20,7 @@ export default function Home() {
   const [message, setMessage] = useState("こんにちは、わたしに音楽を教えてくれる？");
 
   const handleTrackSubmit = async (query: string) => {
-    const res = await fetch(`${apiBaseUrl}/music/search?q=${encodeURIComponent(query)}`);
+    const res = await fetch(`${apiBaseUrl}/track/search?q=${encodeURIComponent(query)}`);
     const data = await res.json();
     setTracks(data.tracks.items);
     setSelectedTrack(null);
@@ -66,7 +66,7 @@ export default function Home() {
       <div className="flex gap-4 overflow-x-auto w-full justify-center mb-6">
         <Image
           src="/shelf.png"
-          alt="music shelf"
+          alt="track shelf"
           width={200}
           height={200}
           className="cursor-pointer"
@@ -74,7 +74,7 @@ export default function Home() {
         />
         <Image
           src="/shelf.png"
-          alt="music shelf"
+          alt="track shelf"
           width={200}
           height={200}
           className="cursor-pointer"

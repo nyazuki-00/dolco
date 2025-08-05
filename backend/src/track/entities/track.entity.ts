@@ -8,7 +8,7 @@ import {
 import { User } from '../../user/entities/user.entity';
 
 @Entity()
-export class Music {
+export class Track {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -42,6 +42,6 @@ export class Music {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.musics)
+  @ManyToOne(() => User, (user) => user.tracks)
   user: User;
 }

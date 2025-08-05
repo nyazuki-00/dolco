@@ -18,8 +18,8 @@ export default function LoginPage() {
 
     if (res.ok) {
       const data = await res.json();
-      localStorage.setItem("token", data.access_token);
-      router.push("/");
+      localStorage.setItem("token", data.accessToken);
+      router.push(`/users/${data.ownerCode}/room`);
     } else {
       alert("ログイン失敗！");
     }
