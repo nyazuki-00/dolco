@@ -1,36 +1,36 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Music } from './entities/music.entity';
-import { CreateMusicDto } from './dto/create-music.dto';
-import { UpdateMusicDto } from './dto/update-music.dto';
+import { Track } from './entities/track.entity';
+import { User } from '../user/entities/user.entity';
+import { CreateTrackDto } from './dto/create-track.dto';
+import { UpdateTrackDto } from './dto/update-track.dto';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import { User } from '../user/entities/user.entity';
 
 @Injectable()
-export class MusicService {
+export class TrackService {
   constructor(
-    @InjectRepository(Music)
-    private musicRepository: Repository<Music>,
+    @InjectRepository(Track)
+    private trackRepository: Repository<Track>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private http: HttpService,
     private config: ConfigService,
   ) {}
 
-  async create(dto: CreateMusicDto, userId: number) {
-    const music = this.musicRepository.create({ ...dto, userId });
-    return this.musicRepository.save(music);
+  async create(dto: CreateTrackDto, userId: number) {
+    const track = this.trackRepository.create({ ...dto, userId });
+    return this.trackRepository.save(track);
   }
 
   findAll() {
-    return `This action returns all music`;
+    return `This action returns all track`;
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} music`;
+    return `This action returns a #${id} track`;
   }
 
   async findByOwnerCode(ownerCode: string) {
@@ -39,18 +39,18 @@ export class MusicService {
     });
     if (!user) throw new NotFoundException('オーナーが見つかりません');
 
-    return this.musicRepository.find({
+    return this.trackRepository.find({
       where: { user: user },
       order: { createdAt: 'DESC' },
     });
   }
 
-  update(id: number, updateMusicDto: UpdateMusicDto) {
-    return `This action updates a #${id} music`;
+  update(id: number, updateTrackDto: UpdateTrackDto) {
+    return `This action updates a #${id} track`;
   }
 
   remove(id: number) {
-    return `This action removes a #${id} music`;
+    return `This action removes a #${id} track`;
   }
 
   async searchTrack(query: string) {

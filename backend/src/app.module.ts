@@ -6,9 +6,9 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { TrackModule } from './track/track.module';
 import { User } from './user/entities/user.entity';
-import { Music } from './music/entities/music.entity';
-import { MusicModule } from './music/music.module';
+import { Track } from './track/entities/track.entity';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { MusicModule } from './music/music.module';
     HttpModule,
     UserModule,
     AuthModule,
-    MusicModule,
+    TrackModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -25,7 +25,7 @@ import { MusicModule } from './music/music.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       autoLoadEntities: true,
-      entities: [User, Music],
+      entities: [User, Track],
       synchronize: true,
     }),
   ],

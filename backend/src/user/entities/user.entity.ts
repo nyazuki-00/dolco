@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Music } from '../../music/entities/music.entity';
+import { Track } from '../../track/entities/track.entity';
 
 @Entity()
 export class User {
@@ -18,6 +18,6 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => Music, (music) => music.user)
-  musics: Music[];
+  @OneToMany(() => Track, (track) => track.user)
+  tracks: Track[];
 }

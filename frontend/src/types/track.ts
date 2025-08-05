@@ -1,4 +1,4 @@
-export type Music = {
+export type Track = {
   id: number;
   spotifyId: string;
   title: string;

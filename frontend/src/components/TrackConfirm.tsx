@@ -24,7 +24,7 @@ export default function TrackConfirm({ selectedTrack, onConfirm }: Props) {
 
   const handleConfirm = async () => {
     try {
-      await fetch(`${apiBaseUrl}/music`, {
+      await fetch(`${apiBaseUrl}/track`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +43,7 @@ export default function TrackConfirm({ selectedTrack, onConfirm }: Props) {
       });
       onConfirm();
     } catch (error) {
-      console.error("Error posting music:", error);
+      console.error("Error posting track:", error);
     }
   };
 

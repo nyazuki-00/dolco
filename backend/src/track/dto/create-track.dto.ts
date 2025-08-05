@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsOptional, IsString, IsArray } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsArray } from 'class-validator';
 
-export class CreateMusicDto {
+export class CreateTrackDto {
   @IsNotEmpty()
   @IsString()
   spotifyId: string;
