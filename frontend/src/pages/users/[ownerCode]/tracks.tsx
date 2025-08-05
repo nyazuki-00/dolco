@@ -1,29 +1,36 @@
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { apiBaseUrl } from "@/libs/config";
 import Image from "next/image";
 import type { Music } from "@/types/music";
 
-type Props = {
-  musicHistory: Music[];
-  onClose: () => void;
-};
-
-export default function MusicHistoryModal({ musicHistory, onClose }: Props) {
+export default function TracksPage	() {
+  const router = useRouter();
+  const { ownerCode } = router.query;
+  const [musicHistory, setMusicHistory] = useState<Music[]>([]);
   const [selectedMusic, setSelectedMusic] = useState<Music | null>(null);
 
+  useEffect(() => {
+    if (typeof ownerCode !== "string") return;
+
+    fetch(`${apiBaseUrl}/music/${ownerCode}`)
+      .then((res) => res.json())
+      .then((data) => setMusicHistory(data))
+      .catch((err) => console.error("履歴の取得に失敗", err));
+  }, [ownerCode]);
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-pink-50 bg-opacity-90 p-6 overflow-y-auto z-50">
-      {/* とじるボタン */}
-      <button
-        className="mb-6 text-sm underline text-pink-500 float-right"
-        onClick={onClose}
-      >
-        とじる
-      </button>
-
       {/* メインタイトル */}
       <h2 className="text-xl font-bold text-center text-pink-700 mb-6 border border-pink-200 rounded-lg py-2 px-4 w-fit mx-auto">
         Music
       </h2>
+
+      <button
+        className="mt-6 bg-blue-200 px-4 py-2 rounded right-0"
+        onClick={() => router.back()}
+      >
+        戻る
+      </button>
 
       <div className="flex justify-center items-start mb-6 gap-4">
         {/* ドール */}
